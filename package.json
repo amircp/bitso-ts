@@ -1,0 +1,74 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "preversion": "git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "peerDependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "bitso-ts",
+  "author": "Amir C.",
+  "homepage": "https://github.com/amircp/bitso-ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amircp/bitso-ts"
+  },
+  "keywords": [
+    "bitso",
+    "bitso wrapper",
+    "bitcoin",
+    "crypto trading",
+    "trading"
+  ],
+  "module": "dist/bitso-typescript.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/bitso-typescript.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/bitso-typescript.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^6.0.4",
+    "husky": "^7.0.4",
+    "size-limit": "^6.0.4",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "crypto": "^1.0.1",
+    "dayjs": "^1.10.7"
+  }
+}
