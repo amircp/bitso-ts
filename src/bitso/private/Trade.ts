@@ -4,7 +4,7 @@ import SigningRequest from '../helpers/SigningRequest';
 import { host } from '../types/client';
 import { Ticker } from '../types/IBooks';
 import IPlaceOrder, { IOrderID } from '../types/IPlaceOrder';
-import { IOpenOrders } from '../types/Trades';
+import { IOpenOrders, IOrderTrades, IUserTrades } from '../types/Trades';
 
 export class TradeAPI extends HttpClient {
   private _signReq: SigningRequest;
@@ -26,7 +26,6 @@ export class TradeAPI extends HttpClient {
       payload: {},
       endpoint: endpoint,
     });
-
     return await this._httpClient.get<[IOpenOrders]>(endpoint + '?book=' + book);
   }
 
@@ -38,7 +37,6 @@ export class TradeAPI extends HttpClient {
       payload: {},
       endpoint: endpoint,
     });
-
     return await this._httpClient.get<[string]>(endpoint + queryParams);
   }
 
@@ -88,6 +86,38 @@ export class TradeAPI extends HttpClient {
       price: limit_price.toString()      
     };
     return await this.placeOrder(request);
+  }
+
+  async getUserTrades(): Promise<[IOrderTrades]> {
+    const endpoint = 'user_trades';
+    this.setRequest({
+      method: 'POST',
+      payload: '',
+      endpoint: endpoint,
+    });
+    return await this._httpClient.post<[IOrderTrades]>(endpoint);
+  }
+
+  async getOrderTrades(origin_ids: string[]): Promise<[IOrderTrades]> {
+    const endpoint = 'order_trades';
+    let queryParams = origin_ids.length > 0 ? '?origin_id='.concat(origin_ids.join(',')) : '';
+    this.setRequest({
+      method: 'GET',
+      payload: {},
+      endpoint: endpoint,
+    });
+    return await this._httpClient.get<[IOrderTrades]>(endpoint + queryParams);
+  }
+
+  async lookupOrders(oids:string[]): Promise<[IOpenOrders]> {
+    const endpoint = 'order';
+    let queryParams = oids.length > 0 ? '?oids='.concat(oids.join(',')) : '';
+    this.setRequest({
+      method: 'GET',
+      payload: {},
+      endpoint: endpoint,
+    });
+    return await this._httpClient.get<[IOpenOrders]>(endpoint + queryParams);
   }
 
   private setRequest({

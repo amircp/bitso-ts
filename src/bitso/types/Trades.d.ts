@@ -15,10 +15,10 @@ export interface IUserTrades extends ITrades {
     fees_amount: string,
     fees_currency: string,
     oid: string,
-    side: string
+    side: string,
 }
 
-export interface  IOrderTrades extends IUserTrades {
+export interface IOrderTrades extends IUserTrades {
     origin_id: string,
     maker_side: string
 }
