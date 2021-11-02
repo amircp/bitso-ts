@@ -8,7 +8,10 @@ import IPlaceOrder, { IOrderID } from '../types/IPlaceOrder';
 export class PrivateAPI extends HttpClient {
   private _signReq: SigningRequest;
 
-  constructor({ version, test }: { version: string; test?: boolean }, signRequest: SigningRequest) {
+  constructor(
+    { version, test }: { version: string; test?: boolean },
+    signRequest: SigningRequest
+  ) {
     super(test ? host.TEST : host.PROD + '/' + version + '/');
     this._initializeResponseInterceptor();
     this._initializeRequestInterceptor();
@@ -61,17 +64,31 @@ export class PrivateAPI extends HttpClient {
 
   //async getFees() {}
 
-  private setRequest({ method, payload, endpoint }: { method: string; payload: any; endpoint: string }): void {
+  private setRequest({
+    method,
+    payload,
+    endpoint,
+  }: {
+    method: string;
+    payload: any;
+    endpoint: string;
+  }): void {
     this._signReq.method(method);
     this._signReq.payload(payload);
     this._signReq.endpoint(endpoint);
   }
   private _initializeResponseInterceptor(): void {
-    this._httpClient.interceptors.response.use(this._handleResponse, this._handleError);
+    this._httpClient.interceptors.response.use(
+      this._handleResponse,
+      this._handleError
+    );
   }
 
   private _initializeRequestInterceptor = () => {
-    this._httpClient.interceptors.request.use(this._handleRequest, this._handleError);
+    this._httpClient.interceptors.request.use(
+      this._handleRequest,
+      this._handleError
+    );
   };
 
   private _handleRequest = (config: AxiosRequestConfig) => {

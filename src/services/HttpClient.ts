@@ -1,4 +1,4 @@
-import axios, { AxiosInstance} from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 declare module 'axios' {
   interface AxiosResponse<T = any> extends Promise<T> {}
@@ -7,7 +7,11 @@ declare module 'axios' {
 export default abstract class HttpClient {
   protected readonly _httpClient: AxiosInstance;
 
-  constructor(private baseUrl: string, private headers?: any, private timeout?: number) {
+  constructor(
+    private baseUrl: string,
+    private headers?: any,
+    private timeout?: number
+  ) {
     this._httpClient = this.getInstance();
   }
 
@@ -20,7 +24,8 @@ export default abstract class HttpClient {
   }
 
   public setAuthToken(token: string): void {
-    this._httpClient.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    this._httpClient.defaults.headers.common['Authorization'] =
+      'Bearer ' + token;
   }
 
   public setHeaders(customHeaders: object): void {

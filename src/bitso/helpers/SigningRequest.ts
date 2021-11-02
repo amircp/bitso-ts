@@ -45,7 +45,10 @@ export default class SigningRequest {
   }
 
   createSigningRequest(): string {
-    return crypto.createHmac('sha256', this._secret).update(this._bufferSigning).digest('hex');
+    return crypto
+      .createHmac('sha256', this._secret)
+      .update(this._bufferSigning)
+      .digest('hex');
   }
 
   setBufferData(): void {

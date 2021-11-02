@@ -14,12 +14,10 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test",
-    "lint": "tsdx lint",
+    "lint": "tsdx lint src",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why",
-    "preversion": "git add -A src",
-    "postversion": "git push && git push --tags"
+    "analyze": "size-limit --why"
   },
   "peerDependencies": {},
   "husky": {
