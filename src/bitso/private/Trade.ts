@@ -19,38 +19,72 @@ export class TradeAPI extends HttpClient {
     this._signReq = signRequest;
   }
 
-  async getOpenOrders(book: Ticker): Promise<[IOpenOrders]> {
+  public async getOpenOrders({
+    book,
+    marker,
+    sort,
+    limit
+  }: {
+    book?: Ticker,
+    marker?: string,
+    sort?: 'desc' | 'asc',
+    limit?: string
+  }): Promise<[IOpenOrders]> {
     const endpoint = 'open_orders';
+    let queryParams = new URLSearchParams();
+    if(book) queryParams.set('book', book);
+    if(marker) queryParams.set('marker', marker);
+    if(sort) queryParams.set('sort', sort);
+    if(limit) queryParams.set('limit', limit);
     this.setRequest({
       method: 'GET',
       payload: {},
       endpoint: endpoint,
     });
-    return await this._httpClient.get<[IOpenOrders]>(endpoint + '?book=' + book);
+    return await this._httpClient.get<[IOpenOrders]>(endpoint + '?' + queryParams);
   }
 
-  async cancelOrder(oids: string[]): Promise<[string]> {
+  public async cancelOrder({
+    oid, oids, origin_ids
+  }:{
+    oid?: string,
+    oids?: string[],
+    origin_ids?: string[]
+  }): Promise<[string]> {
     const endpoint = 'orders';
-    let queryParams = '?oids='.concat(oids.join(','));
+    let endpointFinal = endpoint;
+    if(oid)  {
+      endpointFinal = endpointFinal.concat('/' + oid);
+    } else if(oids) {
+      let queryParams = new URLSearchParams();
+      queryParams.set('oids', oids.join(','));
+      endpointFinal = endpointFinal.concat('?' + queryParams);
+    } else if(origin_ids) {
+      let queryParams = new URLSearchParams();
+      queryParams.set('origin_ids', origin_ids.join(','));
+      endpointFinal = endpointFinal.concat('?' + queryParams);
+    } else {
+      endpointFinal = endpointFinal.concat('/all');
+    }
     this.setRequest({
       method: 'DELETE',
       payload: {},
       endpoint: endpoint,
     });
-    return await this._httpClient.get<[string]>(endpoint + queryParams);
+    return await this._httpClient.get<[string]>(endpointFinal);
   }
 
-  async placeOrder(orderPayload: IPlaceOrder): Promise<IOrderID> {
+  public async placeOrder(orderPayload: IPlaceOrder): Promise<IOrderID> {
     const endpoint = 'orders';
     this.setRequest({
       method: 'POST',
       payload: orderPayload,
       endpoint: endpoint,
     });
-    return await this._httpClient.post<IOrderID>(endpoint);
+    return await this._httpClient.post<IOrderID>(endpoint, orderPayload);
   }
 
-  async placeMarketBuyOrder(currency: string, quantity: string): Promise<IOrderID> {
+  public async placeMarketBuyOrder(currency: string, quantity: string): Promise<IOrderID> {
     const request: IPlaceOrder = {
       book: currency,
       side: 'buy',
@@ -60,7 +94,7 @@ export class TradeAPI extends HttpClient {
     return await this.placeOrder(request);
   }
 
-  async placeMarketSellOrder(currency: string, quantity: string): Promise<IOrderID> {
+  public async placeMarketSellOrder(currency: string, quantity: string): Promise<IOrderID> {
     const request: IPlaceOrder = {
       book: currency,
       side: 'sell',
@@ -70,7 +104,7 @@ export class TradeAPI extends HttpClient {
     return await this.placeOrder(request);
   }
 
-  async placeLimitSellOrder({currency, limit_price, quantity} : {currency: Ticker, limit_price: string, quantity: string}): Promise<IOrderID> {
+  public async placeLimitSellOrder({currency, limit_price, quantity} : {currency: Ticker, limit_price: string, quantity: string}): Promise<IOrderID> {
     const request: IPlaceOrder = {
       book: currency,
       side: 'sell',
@@ -81,7 +115,7 @@ export class TradeAPI extends HttpClient {
     return await this.placeOrder(request);
   }
 
-  async placeLimitBuyOrder({currency, limit_price, quantity} : {currency: Ticker, limit_price: string, quantity: string}): Promise<IOrderID> {
+  public async placeLimitBuyOrder({currency, limit_price, quantity} : {currency: Ticker, limit_price: string, quantity: string}): Promise<IOrderID> {
     const request: IPlaceOrder = {
       book: currency,
       side: 'sell',
@@ -92,36 +126,71 @@ export class TradeAPI extends HttpClient {
     return await this.placeOrder(request);
   }
 
-  async getUserTrades(): Promise<[IOrderTrades]> {
-    const endpoint = 'user_trades';
-    this.setRequest({
-      method: 'POST',
-      payload: '',
-      endpoint: endpoint,
-    });
-    return await this._httpClient.post<[IOrderTrades]>(endpoint);
-  }
+  public async getUserTrades({
+    oid,
+    origin_id
+  }:{
+    oid?: string,
+    origin_id?: string
+  }): Promise<[IOrderTrades]> {
+    let endpoint = 'user_trades';
+    let queryParams = new URLSearchParams();
+    if(oid) queryParams.set('oid', oid);
+    if(origin_id) queryParams.set('origin_id', origin_id);
+    let endpointFinal = endpoint.concat('?' + queryParams);
 
-  async getOrderTrades(origin_ids: string[]): Promise<[IOrderTrades]> {
-    const endpoint = 'order_trades';
-    let queryParams = origin_ids.length > 0 ? '?origin_id='.concat(origin_ids.join(',')) : '';
     this.setRequest({
       method: 'GET',
       payload: {},
       endpoint: endpoint,
     });
-    return await this._httpClient.get<[IOrderTrades]>(endpoint + queryParams);
+    return await this._httpClient.post<[IOrderTrades]>(endpointFinal);
   }
 
-  async lookupOrders(oids:string[]): Promise<[IOpenOrders]> {
-    const endpoint = 'order';
-    let queryParams = oids.length > 0 ? '?oids='.concat(oids.join(',')) : '';
+  public async getOrderTrades({origin_id, oid} : {origin_id?: string, oid?: string}): Promise<[IOrderTrades]> {
+    let endpoint = 'order_trades';
+    let queryParams = new URLSearchParams();
+    if(oid) queryParams.set('oid', oid);
+    if(origin_id) queryParams.set('origin_id', origin_id);
+    let endpointFinal = endpoint.concat('?' + queryParams);
+
     this.setRequest({
       method: 'GET',
       payload: {},
       endpoint: endpoint,
     });
-    return await this._httpClient.get<[IOpenOrders]>(endpoint + queryParams);
+    return await this._httpClient.get<[IOrderTrades]>(endpointFinal);
+  }
+
+  public async lookupOrders({
+    oid, oids, origin_ids
+  }:{
+    oid?: string,
+    oids?: string[],
+    origin_ids?: string[]
+  }): Promise<[IOpenOrders]> {
+    const endpoint = 'orders';
+    let endpointFinal = endpoint;
+    if(oid)  {
+      endpointFinal = endpointFinal.concat('/' + oid);
+    } else if(oids) {
+      let queryParams = new URLSearchParams();
+      queryParams.set('oids', oids.join(','));
+      endpointFinal = endpointFinal.concat('?' + queryParams);
+    } else if(origin_ids) {
+      let queryParams = new URLSearchParams();
+      queryParams.set('origin_ids', origin_ids.join(','));
+      endpointFinal = endpointFinal.concat('?' + queryParams);
+    } else {
+      endpointFinal = endpoint
+    }
+
+    this.setRequest({
+      method: 'GET',
+      payload: {},
+      endpoint: endpoint,
+    });
+    return await this._httpClient.get<[IOpenOrders]>(endpointFinal);
   }
 
   private setRequest({

@@ -4,6 +4,7 @@ import { host } from '../types/client';
 import IBooks, { Ticker } from '../types/IBooks';
 import IOrderBook from '../types/IOrderBook';
 import ITickers from '../types/ITickers';
+import { ITrades } from '../types/Trades';
 
 export class PublicAPI extends HttpClient {
   constructor({ version, test }: { version: string; test?: boolean }) {
@@ -21,6 +22,21 @@ export class PublicAPI extends HttpClient {
 
   public async getOrderBook(book: Ticker): Promise<IOrderBook[]> {
     return await this._httpClient.get<[IOrderBook]>('/order_book?book=' + book);
+  }
+
+  public async getTrades({
+    book,
+    marker,
+    sort,
+    limit
+  } : { book: Ticker, marker?: string, sort?: 'desc' | 'asc', limit?: string  }): Promise<[ITrades]> {
+    let queryParams = new URLSearchParams();
+    if(book) queryParams.set('book',book);
+    if(marker) queryParams.set('marker', marker);
+    if(sort)  queryParams.set('sort', sort);
+    if(limit) queryParams.set('limit', limit) ;
+
+    return await this._httpClient.get<[ITrades]>('/trades?'+queryParams);
   }
 
   private _initializeResponseInterceptor(): void {

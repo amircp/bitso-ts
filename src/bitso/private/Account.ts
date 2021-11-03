@@ -1,7 +1,9 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import HttpClient from '../../services/HttpClient';
 import SigningRequest from '../helpers/SigningRequest';
+import { Account, AccountBalance } from '../types/Account';
 import { host } from '../types/client';
+import { Fees } from '../types/Fees';
 
 export class AccountAPI extends HttpClient {
   private _signReq: SigningRequest;
@@ -16,15 +18,34 @@ export class AccountAPI extends HttpClient {
     this._signReq = signRequest;
   }
 
-  public async getAccountBalance(): Promise<any> {
+  public async getAccountBalance(): Promise<[AccountBalance]> {
     const endpoint = 'balance';
     this.setRequest({
       method: 'GET',
       payload: {},
       endpoint: endpoint,
     });
+    return await this._httpClient.get<[AccountBalance]>(endpoint);
+  }
 
-    return await this._httpClient.get<any>(endpoint);
+  public async getAccountStatus(): Promise<Account> {
+    const endpoint = 'account_status';
+    this.setRequest({
+      method: 'GET',
+      payload: {},
+      endpoint: endpoint
+    });
+    return await this._httpClient.get<Account>(endpoint);
+  }
+
+  public async getFees(): Promise<Fees> {
+    const endpoint = 'fees';
+    this.setRequest({
+      method: 'GET',
+      payload: {},
+      endpoint: endpoint
+    });
+    return await this._httpClient.get<Fees>(endpoint);
   }
 
   private setRequest({
@@ -33,7 +54,7 @@ export class AccountAPI extends HttpClient {
     endpoint,
   }: {
     method: string;
-    payload: any;
+    payload?: any;
     endpoint: string;
   }): void {
     this._signReq.method(method);

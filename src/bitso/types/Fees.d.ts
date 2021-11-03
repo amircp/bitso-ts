@@ -8,4 +8,5 @@ export type fee_data = {
 }
 export type Fees = {
     fees: [fee_data];
+    withdrawal_fees: any;
 }
