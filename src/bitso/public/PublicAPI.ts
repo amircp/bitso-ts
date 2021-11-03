@@ -11,15 +11,15 @@ export class PublicAPI extends HttpClient {
     this._initializeResponseInterceptor();
   }
 
-  async getAvailableBooks(): Promise<IBooks[]> {
+  public async getAvailableBooks(): Promise<IBooks[]> {
     return await this._httpClient.get<[IBooks]>('/available_books');
   }
 
-  async getTicker(book: Ticker): Promise<ITickers> {
+  public async getTicker(book: Ticker): Promise<ITickers> {
     return await this._httpClient.get<ITickers>('/ticker?book=' + book);
   }
 
-  async getOrderBook(book: Ticker): Promise<IOrderBook[]> {
+  public async getOrderBook(book: Ticker): Promise<IOrderBook[]> {
     return await this._httpClient.get<[IOrderBook]>('/order_book?book=' + book);
   }
 

@@ -1,4 +1,4 @@
-interface IBookPrice {
+export interface IBookPrice {
   book: string;
   price: string;
   amount: string;

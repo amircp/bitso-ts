@@ -2,6 +2,7 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import HttpClient from '../../services/HttpClient';
 import SigningRequest from '../helpers/SigningRequest';
 import { host } from '../types/client';
+import { FundingDestination } from '../types/Funding';
 
 
 export class FundsAPI extends HttpClient {
@@ -17,6 +18,16 @@ export class FundsAPI extends HttpClient {
     this._signReq = signRequest;
   }
 
+  async fundingDestination(fund_currency: string): Promise<FundingDestination> {
+    const endpoint = 'funding_destination';
+    this.setRequest({
+      method: 'GET',
+      payload: {},
+      endpoint: endpoint,
+    });
+    return await this._httpClient.get<FundingDestination>(endpoint + '?fund_currency=' + fund_currency);
+  }
+
   private setRequest({
     method,
     payload,
@@ -30,6 +41,7 @@ export class FundsAPI extends HttpClient {
     this._signReq.payload(payload);
     this._signReq.endpoint(endpoint);
   }
+  
   private _initializeResponseInterceptor(): void {
     this._httpClient.interceptors.response.use(
       this._handleResponse,

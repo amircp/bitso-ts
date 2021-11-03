@@ -4,7 +4,7 @@ import SigningRequest from '../helpers/SigningRequest';
 import { host } from '../types/client';
 import { Ticker } from '../types/IBooks';
 import IPlaceOrder, { IOrderID } from '../types/IPlaceOrder';
-import { IOpenOrders, IOrderTrades, IUserTrades } from '../types/Trades';
+import { IOpenOrders, IOrderTrades } from '../types/Trades';
 
 export class TradeAPI extends HttpClient {
   private _signReq: SigningRequest;
@@ -50,40 +50,44 @@ export class TradeAPI extends HttpClient {
     return await this._httpClient.post<IOrderID>(endpoint);
   }
 
-  async placeMarketBuyOrder(currency: Ticker): Promise<IOrderID> {
+  async placeMarketBuyOrder(currency: string, quantity: string): Promise<IOrderID> {
     const request: IPlaceOrder = {
       book: currency,
       side: 'buy',
-      type: 'market'      
+      type: 'market',
+      minor: quantity
     };
     return await this.placeOrder(request);
   }
 
-  async placeMarketSellOrder(currency: Ticker): Promise<IOrderID> {
+  async placeMarketSellOrder(currency: string, quantity: string): Promise<IOrderID> {
     const request: IPlaceOrder = {
       book: currency,
       side: 'sell',
-      type: 'market'      
+      type: 'market',
+      minor: quantity,
     };
     return await this.placeOrder(request);
   }
 
-  async placeLimitSellOrder({currency, limit_price} : {currency: Ticker, limit_price: number}): Promise<IOrderID> {
-    const request: IPlaceOrder = {
-      book: currency,
-      side: 'sell',
-      type: 'limit',
-      price: limit_price.toString()      
-    };
-    return await this.placeOrder(request);
-  }
-
-  async placeLimitBuyOrder({currency, limit_price} : {currency: Ticker, limit_price: number}): Promise<IOrderID> {
+  async placeLimitSellOrder({currency, limit_price, quantity} : {currency: Ticker, limit_price: string, quantity: string}): Promise<IOrderID> {
     const request: IPlaceOrder = {
       book: currency,
       side: 'sell',
       type: 'limit',
-      price: limit_price.toString()      
+      price: limit_price,
+      minor: quantity,
+    };
+    return await this.placeOrder(request);
+  }
+
+  async placeLimitBuyOrder({currency, limit_price, quantity} : {currency: Ticker, limit_price: string, quantity: string}): Promise<IOrderID> {
+    const request: IPlaceOrder = {
+      book: currency,
+      side: 'sell',
+      type: 'limit',
+      price: limit_price,
+      minor: quantity,   
     };
     return await this.placeOrder(request);
   }

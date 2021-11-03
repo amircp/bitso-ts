@@ -16,7 +16,7 @@ export class WithdrawAPI extends HttpClient {
     this._signReq = signRequest;
   }
 
-  private setRequest({
+  /* private setRequest({
     method,
     payload,
     endpoint,
@@ -28,7 +28,7 @@ export class WithdrawAPI extends HttpClient {
     this._signReq.method(method);
     this._signReq.payload(payload);
     this._signReq.endpoint(endpoint);
-  }
+  }*/
   private _initializeResponseInterceptor(): void {
     this._httpClient.interceptors.response.use(
       this._handleResponse,

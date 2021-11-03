@@ -16,7 +16,7 @@ export class AccountAPI extends HttpClient {
     this._signReq = signRequest;
   }
 
-  async getAccountBalance(): Promise<any> {
+  public async getAccountBalance(): Promise<any> {
     const endpoint = 'balance';
     this.setRequest({
       method: 'GET',

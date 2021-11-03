@@ -36,7 +36,7 @@ export enum Ticker {
 }
 
 export default interface IBooks {
-  book: Ticker;
+  book: string;
   minimum_amount: string;
   maximum_amount: string;
   minimum_price: string;
