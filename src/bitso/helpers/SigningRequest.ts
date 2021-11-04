@@ -45,19 +45,16 @@ export default class SigningRequest {
   }
 
   createSigningRequest(): string {
+    this._nonce = dayjs().unix();
+    this._bufferSigning = `${this._nonce}${this._method}/${this._version}/${this._endpoint}/`;
+    if (!this.isEmpty(this._payload)) {
+      const serializedPayload = this.serializePayload();
+      this._bufferSigning = this._bufferSigning.concat(serializedPayload);
+    }
     return crypto
       .createHmac('sha256', this._secret)
       .update(this._bufferSigning)
       .digest('hex');
-  }
-
-  setBufferData(): void {
-    this._nonce = dayjs().unix();
-    this._bufferSigning = `${this._nonce}${this._method}/${this._version}/${this._endpoint}/`;
-    if (!this.isEmpty(this.payload)) {
-      const serializedPayload = this.serializePayload();
-      this._bufferSigning = this._bufferSigning.concat(serializedPayload);
-    }
   }
 
   payload(payload: any) {
@@ -72,8 +69,7 @@ export default class SigningRequest {
     this._method = method;
   }
 
-  getHeader(): string {
-    this.setBufferData();
+   getHeader(): string {
     const signingRequest = this.createSigningRequest();
     return `Bitso ${this._key}:${this._nonce}:${signingRequest}`;
   }
