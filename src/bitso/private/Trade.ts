@@ -71,7 +71,7 @@ export class TradeAPI extends HttpClient {
       payload: {},
       endpoint: endpoint,
     });
-    return await this._httpClient.get<[string]>(endpointFinal);
+    return await this._httpClient.delete<[string]>(endpointFinal);
   }
 
   public async placeOrder(orderPayload: IPlaceOrder): Promise<IOrderID> {
@@ -147,7 +147,7 @@ export class TradeAPI extends HttpClient {
       payload: {},
       endpoint: endpoint,
     });
-    return await this._httpClient.post<[IOrderTrades]>(endpointFinal);
+    return await this._httpClient.get<[IOrderTrades]>(endpointFinal);
   }
 
   public async getOrderTrades({origin_id, oid} : {origin_id?: string, oid?: string}): Promise<[IOrderTrades]> {
