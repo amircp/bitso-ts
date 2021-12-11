@@ -57,15 +57,15 @@ export default class SigningRequest {
       .digest('hex');
   }
 
-  payload(payload: any) {
+  set payload(payload: any) {
     this._payload = payload;
   }
 
-  endpoint(endpoint: string) {
+  set endpoint(endpoint: string) {
     this._endpoint = endpoint;
   }
 
-  method(method: string) {
+  set method(method: string) {
     this._method = method;
   }
 

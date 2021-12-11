@@ -20,47 +20,37 @@ export class AccountAPI extends HttpClient {
 
   public async getAccountBalance(): Promise<[AccountBalance]> {
     const endpoint = 'balance';
-    this.setRequest({
-      method: 'GET',
-      payload: {},
-      endpoint: endpoint,
-    });
+
+
+    this._signReq.method = 'GET';
+    this._signReq.payload  = {};
+    this._signReq.endpoint = endpoint;
+
     return await this._httpClient.get<[AccountBalance]>(endpoint);
   }
 
   public async getAccountStatus(): Promise<Account> {
     const endpoint = 'account_status';
-    this.setRequest({
-      method: 'GET',
-      payload: {},
-      endpoint: endpoint
-    });
+
+
+    this._signReq.method = 'GET';
+    this._signReq.payload  = {};
+    this._signReq.endpoint = endpoint;
+
+
     return await this._httpClient.get<Account>(endpoint);
   }
 
   public async getFees(): Promise<Fees> {
     const endpoint = 'fees';
-    this.setRequest({
-      method: 'GET',
-      payload: {},
-      endpoint: endpoint
-    });
+
+    this._signReq.method = 'GET';
+    this._signReq.payload  = {};
+    this._signReq.endpoint = endpoint;
+
     return await this._httpClient.get<Fees>(endpoint);
   }
 
-  private setRequest({
-    method,
-    payload,
-    endpoint,
-  }: {
-    method: string;
-    payload?: any;
-    endpoint: string;
-  }): void {
-    this._signReq.method(method);
-    this._signReq.payload(payload);
-    this._signReq.endpoint(endpoint);
-  }
   private _initializeResponseInterceptor(): void {
     this._httpClient.interceptors.response.use(
       this._handleResponse,

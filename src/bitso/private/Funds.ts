@@ -20,27 +20,14 @@ export class FundsAPI extends HttpClient {
 
   async fundingDestination(fund_currency: string): Promise<FundingDestination> {
     const endpoint = 'funding_destination';
-    this.setRequest({
-      method: 'GET',
-      payload: {},
-      endpoint: endpoint,
-    });
-    return await this._httpClient.get<FundingDestination>(endpoint + '?fund_currency=' + fund_currency);
+    
+    this._signReq.method = 'GET';
+    this._signReq.payload = {};
+    this._signReq.endpoint = endpoint;
+
+      return await this._httpClient.get<FundingDestination>(endpoint + '?fund_currency=' + fund_currency);
   }
 
-  private setRequest({
-    method,
-    payload,
-    endpoint,
-  }: {
-    method: string;
-    payload: any;
-    endpoint: string;
-  }): void {
-    this._signReq.method(method);
-    this._signReq.payload(payload);
-    this._signReq.endpoint(endpoint);
-  }
   
   private _initializeResponseInterceptor(): void {
     this._httpClient.interceptors.response.use(

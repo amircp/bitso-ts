@@ -36,12 +36,12 @@ export class TradeAPI extends HttpClient {
     if(marker) queryParams.set('marker', marker);
     if(sort) queryParams.set('sort', sort);
     if(limit) queryParams.set('limit', limit);
-    this.setRequest({
-      method: 'GET',
-      payload: {},
-      endpoint: endpoint,
-    });
-    return await this._httpClient.get<[IOpenOrders]>(endpoint + '?' + queryParams);
+    
+    this._signReq.method = 'GET';
+    this._signReq.payload = {};
+    this._signReq.endpoint = endpoint;
+    
+      return await this._httpClient.get<[IOpenOrders]>(endpoint + '?' + queryParams);
   }
 
   public async cancelOrder({
@@ -66,21 +66,20 @@ export class TradeAPI extends HttpClient {
     } else {
       endpointFinal = endpointFinal.concat('/all');
     }
-    this.setRequest({
-      method: 'DELETE',
-      payload: {},
-      endpoint: endpoint,
-    });
+    this._signReq.method = 'DELETE';
+    this._signReq.payload = {};
+    this._signReq.endpoint = endpoint;
+  
     return await this._httpClient.delete<[string]>(endpointFinal);
   }
 
   public async placeOrder(orderPayload: IPlaceOrder): Promise<IOrderID> {
     const endpoint = 'orders';
-    this.setRequest({
-      method: 'POST',
-      payload: orderPayload,
-      endpoint: endpoint,
-    });
+    
+    this._signReq.method = 'POST';
+    this._signReq.payload = orderPayload;
+    this._signReq.endpoint = endpoint;
+  
     return await this._httpClient.post<IOrderID>(endpoint, orderPayload);
   }
 
@@ -142,11 +141,10 @@ export class TradeAPI extends HttpClient {
       endpointFinal = endpoint.concat('?' + queryParams);
     }
 
-    this.setRequest({
-      method: 'GET',
-      payload: {},
-      endpoint: endpoint,
-    });
+  
+    this._signReq.method = 'GET';
+    this._signReq.payload = {};
+    this._signReq.endpoint;
     return await this._httpClient.get<[IOrderTrades]>(endpointFinal);
   }
 
@@ -160,12 +158,12 @@ export class TradeAPI extends HttpClient {
       endpointFinal = endpoint.concat('?' + queryParams);
     }
 
-    this.setRequest({
-      method: 'GET',
-      payload: {},
-      endpoint: endpoint,
-    });
-    return await this._httpClient.get<[IOrderTrades]>(endpointFinal);
+
+    this._signReq.method = 'GET';
+    this._signReq.payload = {};
+    this._signReq.endpoint = endpoint;
+
+      return await this._httpClient.get<[IOrderTrades]>(endpointFinal);
   }
 
   public async lookupOrders({
@@ -191,27 +189,14 @@ export class TradeAPI extends HttpClient {
       endpointFinal = endpoint
     }
 
-    this.setRequest({
-      method: 'GET',
-      payload: {},
-      endpoint: endpoint,
-    });
+  
+    this._signReq.method = 'GET';
+    this._signReq.payload = {};
+    this._signReq.endpoint  = endpoint;
+    
     return await this._httpClient.get<[IOpenOrders]>(endpointFinal);
   }
 
-  private setRequest({
-    method,
-    payload,
-    endpoint,
-  }: {
-    method: string;
-    payload: any;
-    endpoint: string;
-  }): void {
-    this._signReq.method(method);
-    this._signReq.payload(payload);
-    this._signReq.endpoint(endpoint);
-  }
   private _initializeResponseInterceptor(): void {
     this._httpClient.interceptors.response.use(
       this._handleResponse,
