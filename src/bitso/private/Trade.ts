@@ -99,7 +99,7 @@ export class TradeAPI extends HttpClient {
       book: currency,
       side: 'sell',
       type: 'market',
-      minor: quantity,
+      major: quantity,
     };
     return await this.placeOrder(request);
   }
