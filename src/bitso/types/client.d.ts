@@ -1,4 +1,4 @@
 export const enum host {
-  TEST = 'https://api-sandbox.bitso.com',
+  TEST = 'https://sandbox.bitso.com',
   PROD = 'https://api.bitso.com',
 }

@@ -110,7 +110,7 @@ export class TradeAPI extends HttpClient {
       side: 'sell',
       type: 'limit',
       price: limit_price,
-      minor: quantity,
+      major: quantity,
     };
     return await this.placeOrder(request);
   }
@@ -137,7 +137,10 @@ export class TradeAPI extends HttpClient {
     let queryParams = new URLSearchParams();
     if(oid) queryParams.set('oid', oid);
     if(origin_id) queryParams.set('origin_id', origin_id);
-    let endpointFinal = endpoint.concat('?' + queryParams);
+    let endpointFinal = endpoint + '/';
+    if(queryParams) {
+      endpointFinal = endpoint.concat('?' + queryParams);
+    }
 
     this.setRequest({
       method: 'GET',
@@ -152,7 +155,10 @@ export class TradeAPI extends HttpClient {
     let queryParams = new URLSearchParams();
     if(oid) queryParams.set('oid', oid);
     if(origin_id) queryParams.set('origin_id', origin_id);
-    let endpointFinal = endpoint.concat('?' + queryParams);
+    let endpointFinal = endpoint + '/';
+    if(queryParams) {
+      endpointFinal = endpoint.concat('?' + queryParams);
+    }
 
     this.setRequest({
       method: 'GET',

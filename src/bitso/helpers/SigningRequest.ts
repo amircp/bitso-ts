@@ -46,7 +46,7 @@ export default class SigningRequest {
 
   createSigningRequest(): string {
     this._nonce = dayjs().unix();
-    this._bufferSigning = `${this._nonce}${this._method}/${this._version}/${this._endpoint}/`;
+    this._bufferSigning = `${this._nonce}${this._method}/${this._version}/${this._endpoint}`;
     if (!this.isEmpty(this._payload)) {
       const serializedPayload = this.serializePayload();
       this._bufferSigning = this._bufferSigning.concat(serializedPayload);
