@@ -1,4 +1,4 @@
-# Bitso-ts (Beta)
+# Bitso-ts
 
 Simple TypeScript Bitso API Wrapper for Public and Private end points.
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/amircp/bitso-ts/blob/master/LICENSE) 
