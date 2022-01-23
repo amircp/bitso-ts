@@ -76,12 +76,11 @@ export class TradeAPI extends HttpClient {
   }
 
   public async placeOrder(orderPayload: IPlaceOrder): Promise<IOrderID> {
-    const endpoint = 'orders';
-    
+    const endpoint = 'orders';    
     this._signReq.method = 'POST';
     this._signReq.payload = orderPayload;
     this._signReq.endpoint = endpoint;
-    console.log(this._signReq.getHeader());
+
     return await this._httpClient.post<IOrderID>('/' + this.apiVersion + '/' + endpoint, orderPayload);
   }
 
@@ -191,7 +190,6 @@ export class TradeAPI extends HttpClient {
       endpointFinal = endpoint
     }
 
-  
     this._signReq.method = 'GET';
     this._signReq.payload = {};
     this._signReq.endpoint  = endpointFinal;
