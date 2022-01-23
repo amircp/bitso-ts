@@ -7,12 +7,13 @@ import { FundingDestination } from '../types/Funding';
 
 export class FundsAPI extends HttpClient {
   private _signReq: SigningRequest;
-
+  private apiVersion: string = ''
   constructor(
     { version, test }: { version: string; test?: boolean },
     signRequest: SigningRequest
   ) {
-    super(test ? host.TEST : host.PROD + '/' + version + '/');
+    super(test ? host.TEST : host.PROD);
+    this.apiVersion = version;
     this._initializeResponseInterceptor();
     this._initializeRequestInterceptor();
     this._signReq = signRequest;
@@ -25,7 +26,7 @@ export class FundsAPI extends HttpClient {
     this._signReq.payload = {};
     this._signReq.endpoint = endpoint;
 
-      return await this._httpClient.get<FundingDestination>(endpoint + '?fund_currency=' + fund_currency);
+      return await this._httpClient.get<FundingDestination>('/' + this.apiVersion + '/' + endpoint + '?fund_currency=' + fund_currency);
   }
 
   

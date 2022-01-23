@@ -8,12 +8,14 @@ import { IOpenOrders, IOrderTrades } from '../types/Trades';
 
 export class TradeAPI extends HttpClient {
   private _signReq: SigningRequest;
+  private apiVersion: string = "";
 
   constructor(
     { version, test }: { version: string; test?: boolean },
     signRequest: SigningRequest
   ) {
-    super(test ? host.TEST : host.PROD + '/' + version + '/');
+    super(test ? host.TEST : host.PROD);
+    this.apiVersion = version;
     this._signReq = signRequest;
     this._initializeResponseInterceptor();
     this._initializeRequestInterceptor();
@@ -41,7 +43,7 @@ export class TradeAPI extends HttpClient {
     this._signReq.payload = {};
     this._signReq.endpoint = endpoint + '?' + queryParams;
     
-      return await this._httpClient.get<[IOpenOrders]>(endpoint + '?' + queryParams);
+      return await this._httpClient.get<[IOpenOrders]>('/' + this.apiVersion + '/' + endpoint + '?' + queryParams);
   }
 
   public async cancelOrder({
@@ -70,7 +72,7 @@ export class TradeAPI extends HttpClient {
     this._signReq.payload = {};
     this._signReq.endpoint = endpointFinal;
   
-    return await this._httpClient.delete<[string]>(endpointFinal);
+    return await this._httpClient.delete<[string]>('/' + this.apiVersion + '/' + endpointFinal);
   }
 
   public async placeOrder(orderPayload: IPlaceOrder): Promise<IOrderID> {
@@ -80,7 +82,7 @@ export class TradeAPI extends HttpClient {
     this._signReq.payload = orderPayload;
     this._signReq.endpoint = endpoint;
     console.log(this._signReq.getHeader());
-    return await this._httpClient.post<IOrderID>(endpoint, orderPayload);
+    return await this._httpClient.post<IOrderID>('/' + this.apiVersion + '/' + endpoint, orderPayload);
   }
 
   public async placeMarketBuyOrder(currency: string, quantity: string): Promise<IOrderID> {
@@ -145,7 +147,7 @@ export class TradeAPI extends HttpClient {
     this._signReq.method = 'GET';
     this._signReq.payload = {};
     this._signReq.endpoint = endpointFinal;
-    return await this._httpClient.get<[IOrderTrades]>(endpointFinal);
+    return await this._httpClient.get<[IOrderTrades]>('/' + this.apiVersion + '/' + endpointFinal);
   }
 
   public async getOrderTrades({origin_id, oid} : {origin_id?: string, oid?: string}): Promise<[IOrderTrades]> {
@@ -163,7 +165,7 @@ export class TradeAPI extends HttpClient {
     this._signReq.payload = {};
     this._signReq.endpoint = endpointFinal;
 
-      return await this._httpClient.get<[IOrderTrades]>(endpointFinal);
+      return await this._httpClient.get<[IOrderTrades]>('/' + this.apiVersion + '/' + endpointFinal);
   }
 
   public async lookupOrders({
@@ -194,7 +196,7 @@ export class TradeAPI extends HttpClient {
     this._signReq.payload = {};
     this._signReq.endpoint  = endpointFinal;
     
-    return await this._httpClient.get<[IOpenOrders]>(endpointFinal);
+    return await this._httpClient.get<[IOpenOrders]>('/' + this.apiVersion + '/' + endpointFinal);
   }
 
   private _initializeResponseInterceptor(): void {

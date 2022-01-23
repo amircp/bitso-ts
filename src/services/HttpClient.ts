@@ -24,8 +24,7 @@ export default abstract class HttpClient {
   }
 
   public setAuthToken(token: string): void {
-    this._httpClient.defaults.headers.common['Authorization'] =
-      'Bearer ' + token;
+    this._httpClient.defaults.headers.common['Authorization'] = token;
   }
 
   public setHeaders(customHeaders: object): void {

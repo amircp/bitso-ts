@@ -7,12 +7,13 @@ import { Fees } from '../types/Fees';
 
 export class AccountAPI extends HttpClient {
   private _signReq: SigningRequest;
-
+  private apiVersion: string = "";
   constructor(
     { version, test }: { version: string; test?: boolean },
     signRequest: SigningRequest
   ) {
-    super(test ? host.TEST : host.PROD + '/' + version + '/');
+    super(test ? host.TEST : host.PROD);
+    this.apiVersion = version;
     this._initializeResponseInterceptor();
     this._initializeRequestInterceptor();
     this._signReq = signRequest;
@@ -26,7 +27,7 @@ export class AccountAPI extends HttpClient {
     this._signReq.payload  = {};
     this._signReq.endpoint = endpoint;
 
-    return await this._httpClient.get<[AccountBalance]>(endpoint);
+    return await this._httpClient.get<[AccountBalance]>('/' + this.apiVersion + '/' + endpoint);
   }
 
   public async getAccountStatus(): Promise<Account> {
@@ -38,7 +39,7 @@ export class AccountAPI extends HttpClient {
     this._signReq.endpoint = endpoint;
 
 
-    return await this._httpClient.get<Account>(endpoint);
+    return await this._httpClient.get<Account>('/' + this.apiVersion + '/' + endpoint);
   }
 
   public async getFees(): Promise<Fees> {
@@ -48,7 +49,7 @@ export class AccountAPI extends HttpClient {
     this._signReq.payload  = {};
     this._signReq.endpoint = endpoint;
 
-    return await this._httpClient.get<Fees>(endpoint);
+    return await this._httpClient.get<Fees>('/' + this.apiVersion + '/' + endpoint);
   }
 
   private _initializeResponseInterceptor(): void {

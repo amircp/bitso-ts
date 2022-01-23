@@ -7,21 +7,25 @@ import ITickers from '../types/ITickers';
 import { ITrades } from '../types/Trades';
 
 export class PublicAPI extends HttpClient {
+
+  private apiVersion: string = "";
+
   constructor({ version, test }: { version: string; test?: boolean }) {
-    super(test ? host.TEST : host.PROD + '/' + version);
+    super(test ? host.TEST : host.PROD );
+    this.apiVersion = version;
     this._initializeResponseInterceptor();
   }
 
   public async getAvailableBooks(): Promise<IBooks[]> {
-    return await this._httpClient.get<[IBooks]>('/available_books');
+    return await this._httpClient.get<[IBooks]>('/' + this.apiVersion + '/available_books');
   }
 
   public async getTicker(book: Ticker): Promise<ITickers> {
-    return await this._httpClient.get<ITickers>('/ticker?book=' + book);
+    return await this._httpClient.get<ITickers>('/' + this.apiVersion + '/ticker?book=' + book);
   }
 
   public async getOrderBook(book: Ticker): Promise<IOrderBook[]> {
-    return await this._httpClient.get<[IOrderBook]>('/order_book?book=' + book);
+    return await this._httpClient.get<[IOrderBook]>('/' + this.apiVersion + '/order_book?book=' + book);
   }
 
   public async getTrades({
@@ -36,7 +40,7 @@ export class PublicAPI extends HttpClient {
     if(sort)  queryParams.set('sort', sort);
     if(limit) queryParams.set('limit', limit) ;
 
-    return await this._httpClient.get<[ITrades]>('/trades?'+queryParams);
+    return await this._httpClient.get<[ITrades]>('/' + this.apiVersion + '/trades?'+queryParams);
   }
 
   private _initializeResponseInterceptor(): void {
