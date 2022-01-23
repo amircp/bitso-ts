@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import * as crypto from 'crypto';
 
 export default class SigningRequest {
@@ -26,7 +25,7 @@ export default class SigningRequest {
     key: string;
     secret: string;
   }) {
-    this._nonce = dayjs().unix();
+    this._nonce =  new Date().getTime();
     this._version = version ?? 'v3';
     this._method = method || '';
     this._payload = payload ?? {};
@@ -45,7 +44,7 @@ export default class SigningRequest {
   }
 
   createSigningRequest(): string {
-    this._nonce = dayjs().unix();
+    this._nonce = new Date().getTime();
     this._bufferSigning = `${this._nonce}${this._method}/${this._version}/${this._endpoint}`;
     if (!this.isEmpty(this._payload)) {
       const serializedPayload = this.serializePayload();
