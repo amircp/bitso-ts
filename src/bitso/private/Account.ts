@@ -14,9 +14,9 @@ export class AccountAPI extends HttpClient {
   ) {
     super(test ? host.TEST : host.PROD);
     this.apiVersion = version;
+    this._signReq = signRequest;
     this._initializeResponseInterceptor();
     this._initializeRequestInterceptor();
-    this._signReq = signRequest;
   }
 
   public async getAccountBalance(): Promise<[AccountBalance]> {
@@ -32,8 +32,6 @@ export class AccountAPI extends HttpClient {
 
   public async getAccountStatus(): Promise<Account> {
     const endpoint = 'account_status';
-
-
     this._signReq.method = 'GET';
     this._signReq.payload  = {};
     this._signReq.endpoint = endpoint;
@@ -67,7 +65,9 @@ export class AccountAPI extends HttpClient {
   };
 
   private _handleRequest = (config: AxiosRequestConfig) => {
+
     config.headers['Authorization'] = this._signReq.getHeader();
+    config.headers['Content-Type'] = 'application/json';
     return config;
   };
 

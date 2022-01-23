@@ -215,7 +215,7 @@ export class TradeAPI extends HttpClient {
 
   private _handleRequest = (config: AxiosRequestConfig) => {
     config.headers['Authorization'] = this._signReq.getHeader();
-    console.log(this._signReq.getHeader());
+    config.headers['Content-Type'] = 'application/json';
     return config;
   };
 

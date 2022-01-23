@@ -14,9 +14,9 @@ export class FundsAPI extends HttpClient {
   ) {
     super(test ? host.TEST : host.PROD);
     this.apiVersion = version;
+    this._signReq = signRequest;
     this._initializeResponseInterceptor();
     this._initializeRequestInterceptor();
-    this._signReq = signRequest;
   }
 
   async fundingDestination(fund_currency: string): Promise<FundingDestination> {
@@ -46,6 +46,7 @@ export class FundsAPI extends HttpClient {
 
   private _handleRequest = (config: AxiosRequestConfig) => {
     config.headers['Authorization'] = this._signReq.getHeader();
+    config.headers['Content-Type'] = 'application/json';
     return config;
   };
 

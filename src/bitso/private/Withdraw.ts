@@ -45,6 +45,7 @@ export class WithdrawAPI extends HttpClient {
 
   private _handleRequest = (config: AxiosRequestConfig) => {
     config.headers['Authorization'] = this._signReq.getHeader();
+    config.headers['Content-Type'] = 'application/json';
     return config;
   };
 
