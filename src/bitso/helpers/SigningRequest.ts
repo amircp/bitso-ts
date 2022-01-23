@@ -22,7 +22,7 @@ export default class SigningRequest {
     endpoint: string;
     version: string;
     method: string;
-    payload: string;
+    payload: object;
     key: string;
     secret: string;
   }) {

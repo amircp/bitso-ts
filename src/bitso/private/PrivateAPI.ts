@@ -20,7 +20,7 @@ const PrivateAPI = ({
     key: key,
     endpoint:'',
     method:'',
-    payload:''
+    payload: {}
   });
   return {
     Trade: new TradeAPI({version, test}, Sign),

@@ -14,9 +14,9 @@ export class TradeAPI extends HttpClient {
     signRequest: SigningRequest
   ) {
     super(test ? host.TEST : host.PROD + '/' + version + '/');
+    this._signReq = signRequest;
     this._initializeResponseInterceptor();
     this._initializeRequestInterceptor();
-    this._signReq = signRequest;
   }
 
   public async getOpenOrders({
@@ -39,7 +39,7 @@ export class TradeAPI extends HttpClient {
     
     this._signReq.method = 'GET';
     this._signReq.payload = {};
-    this._signReq.endpoint = endpoint;
+    this._signReq.endpoint = endpoint + '?' + queryParams;
     
       return await this._httpClient.get<[IOpenOrders]>(endpoint + '?' + queryParams);
   }
@@ -68,7 +68,7 @@ export class TradeAPI extends HttpClient {
     }
     this._signReq.method = 'DELETE';
     this._signReq.payload = {};
-    this._signReq.endpoint = endpoint;
+    this._signReq.endpoint = endpointFinal;
   
     return await this._httpClient.delete<[string]>(endpointFinal);
   }
@@ -79,7 +79,7 @@ export class TradeAPI extends HttpClient {
     this._signReq.method = 'POST';
     this._signReq.payload = orderPayload;
     this._signReq.endpoint = endpoint;
-  
+    console.log(this._signReq.getHeader());
     return await this._httpClient.post<IOrderID>(endpoint, orderPayload);
   }
 
@@ -144,7 +144,7 @@ export class TradeAPI extends HttpClient {
   
     this._signReq.method = 'GET';
     this._signReq.payload = {};
-    this._signReq.endpoint;
+    this._signReq.endpoint = endpointFinal;
     return await this._httpClient.get<[IOrderTrades]>(endpointFinal);
   }
 
@@ -161,7 +161,7 @@ export class TradeAPI extends HttpClient {
 
     this._signReq.method = 'GET';
     this._signReq.payload = {};
-    this._signReq.endpoint = endpoint;
+    this._signReq.endpoint = endpointFinal;
 
       return await this._httpClient.get<[IOrderTrades]>(endpointFinal);
   }
@@ -192,7 +192,7 @@ export class TradeAPI extends HttpClient {
   
     this._signReq.method = 'GET';
     this._signReq.payload = {};
-    this._signReq.endpoint  = endpoint;
+    this._signReq.endpoint  = endpointFinal;
     
     return await this._httpClient.get<[IOpenOrders]>(endpointFinal);
   }
@@ -213,6 +213,7 @@ export class TradeAPI extends HttpClient {
 
   private _handleRequest = (config: AxiosRequestConfig) => {
     config.headers['Authorization'] = this._signReq.getHeader();
+    console.log(this._signReq.getHeader());
     return config;
   };
 
