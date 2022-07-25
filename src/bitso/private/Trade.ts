@@ -219,5 +219,5 @@ export class TradeAPI extends HttpClient {
 
   private _handleResponse = ({ data }: AxiosResponse) => data.payload;
 
-  protected _handleError = (error: any) => Promise.reject(error);
+  protected _handleError = (error: any) => Promise.reject(error?.error ?? error);
 }
