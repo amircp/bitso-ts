@@ -121,7 +121,7 @@ export class TradeAPI extends HttpClient {
       side: 'buy',
       type: 'limit',
       price: limit_price,
-      minor: quantity,   
+      major: quantity,   
     };
     return await this.placeOrder(request);
   }
