@@ -1,5 +1,5 @@
 {
-  "version": "0.5.0",
+  "version": "0.5.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -43,7 +43,13 @@
     "bitso wrapper",
     "bitcoin",
     "crypto trading",
-    "trading"
+    "trading",
+    "stocks",
+    "crypto trading",
+    "bitso trading",
+    "bitcoin lib",
+    "bitcoin trading",
+    "buy bitcoin"
   ],
   "module": "dist/bitso-typescript.esm.js",
   "size-limit": [
