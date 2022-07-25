@@ -118,7 +118,7 @@ export class TradeAPI extends HttpClient {
   public async placeLimitBuyOrder({currency, limit_price, quantity} : {currency: Ticker, limit_price: string, quantity: string}): Promise<IOrderID> {
     const request: IPlaceOrder = {
       book: currency,
-      side: 'sell',
+      side: 'buy',
       type: 'limit',
       price: limit_price,
       minor: quantity,   
