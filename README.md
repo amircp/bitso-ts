@@ -92,7 +92,11 @@ Every namespace has its own set of functions. The most interesting one is Trade:
 
 In the following example will place a BUY LIMIT order into the exchange.
 ```javascript
-Bitso.Trade.placeLimitBuyOrder(Ticker.BTCMXN,'1306864.89','1000').then( (data) => {
+Bitso.Trade.placeLimitBuyOrder({
+  currency: Ticker.BTCMXN,
+  limit_price: '1306864.89',
+  quantity: '1000'
+  }).then( (data) => {
   console.log(data);
 });
 ```
